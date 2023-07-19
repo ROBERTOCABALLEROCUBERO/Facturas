@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row mt-5">
+      <div class="col-md-6 mx-auto">
+        <h2 class="text-center">Editar Factura</h2>
+        <p class="text-center">Aquí puedes editar los detalles de la factura:</p>
+  
+        <ng-container *ngIf="lineasFactura && lineasFactura.length > 0">
+          <ng-container *ngFor="let lineaFactura of lineasFactura; let i = index">
+            <form [formGroup]="getLineaFacturaForm(i)" (ngSubmit)="onSubmit(i)" class="my-4 p-4 border rounded" style="max-width: 500px;">
+              <input type="hidden" formControlName="lineaFacturaId" />
+              <div class="form-group">
+                <label for="concepto{{i}}">Concepto:</label>
+                <input type="text" class="form-control" id="concepto{{i}}" formControlName="concepto" />
+              </div>
+              <div class="form-group">
+                <label for="unidades{{i}}">Unidades:</label>
+                <input type="number" class="form-control" id="unidades{{i}}" formControlName="unidades" />
+              </div>
+              <div class="form-group">
+                <label for="precio{{i}}">Precio:</label>
+                <input type="number" class="form-control" id="precio{{i}}" formControlName="precio" />
+              </div>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </form>
+          </ng-container>
+        </ng-container>
+  
+        <button type="button" class="btn btn-primary mt-4" (click)="actualizarFactura()">Actualizar Factura</button>
+      </div>
+    </div>
+  </div>
+  

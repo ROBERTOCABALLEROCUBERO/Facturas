@@ -4,6 +4,7 @@ import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Factura } from '../models';
 import { FacturaDTO } from '../models';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -25,25 +26,44 @@ export class FacturaService {
     );
   }
 
- 
-crearFactura(clienteId: number, numerofactura: number): Observable<Factura> {
-  return new Observable<Factura>((observer) => {
-    console.log(`${this.apiUrl}?clienteId=${clienteId}&num=${numerofactura}`);
-    axios.post<Factura>(`${this.apiUrl}?clienteId=${clienteId}&num=${numerofactura}`)
-      .then((response: AxiosResponse<Factura>) => {
-        observer.next(response.data);
-        observer.complete();
-      })
-      .catch((error: AxiosError) => {
-        observer.error(error);
-      });
-  });
-}
-  
-  updateFactura(id: number, factura: Factura): Observable<void> {
-    return from(axios.put<void>(`${this.apiUrl}/${id}`, factura)).pipe(
-      map(() => {})
-    );
+  crearFactura(clienteId: number, numerofactura: number): Observable<Factura> {
+    return new Observable<Factura>((observer) => {
+      console.log(`${this.apiUrl}?clienteId=${clienteId}&num=${numerofactura}`);
+      axios
+        .post<Factura>(
+          `${this.apiUrl}?clienteId=${clienteId}&num=${numerofactura}`
+        )
+        .then((response: AxiosResponse<Factura>) => {
+          observer.next(response.data);
+          observer.complete();
+        })
+        .catch((error: AxiosError) => {
+          observer.error(error);
+        });
+    });
+  }
+  getFacturaArchivo(identificador: number): Observable<Blob> {
+    const url = `${this.apiUrl}/archivo?identificador=${identificador}`;
+
+    // Realizar la solicitud GET utilizando Axios
+    return new Observable((observer) => {
+      axios.get(url, { responseType: 'blob' })
+        .then((response) => {
+          // Resolver la promesa con el blob de la respuesta
+          observer.next(response.data);
+          observer.complete();
+        })
+        .catch((error) => {
+          // Manejar el error y notificar al observador
+          observer.error(error);
+        });
+    });
+  }
+
+  async updateFactura(numFactura: number, id: number): Promise<void> {
+    const url = `${this.apiUrl}/${numFactura}?id=${id}`;
+    console.log(url);
+    await axios.put(url);
   }
 
   deleteFactura(id: number): Observable<void> {

@@ -51,8 +51,8 @@
                   <p>{{ factura.numeroFactura }}</p>
                   <div>
                     <button class="btn btn-primary" (click)="descarga(factura.numeroFactura!)">Imprimir</button>
-                    <button class="btn btn-primary">Editar</button>
-                  </div>
+                    <button class="btn btn-primary" [routerLink]="['/editar', factura.numeroFactura]">Editar</button>
+                    </div>
                 </div>
               </div>
               <button class="btn btn-primary mt-3" routerLink="/crear">Crear Factura</button>

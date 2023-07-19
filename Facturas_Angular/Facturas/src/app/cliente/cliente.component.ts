@@ -28,13 +28,38 @@ export class ClienteComponent implements OnInit {
   async obtenerClientePorId(id: number): Promise<void> {
     this.cliente = await this.clienteService.getClienteById(id);
   }
-  descarga(numeroFactura: number) {
-    // Aquí puedes agregar tu lógica para descargar el archivo correspondiente al número de factura
-    // Puedes utilizar el número de factura como necesites, como en el nombre del archivo o en una solicitud a tu servidor
-
-    // Ejemplo de cómo mostrar el número de factura en la consola
+  async descarga(numeroFactura: number) {
+    try {
+      const blob = await this.facturaService.getFacturaArchivo(numeroFactura).toPromise();
+  
+      // Verificar si el blob es válido antes de continuar
+      if (!blob) {
+        console.log('No se encontró la factura para el número de factura:', numeroFactura);
+        return;
+      }
+  
+      const fileName = `factura_${numeroFactura}.pdf`;
+  
+      // Crear un objeto URL a partir del blob
+      const url = window.URL.createObjectURL(blob);
+  
+      // Crear un enlace temporal para descargar el archivo
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      link.target = '_blank';
+      link.click();
+  
+      // Liberar el objeto URL
+      window.URL.revokeObjectURL(url);
+  
+      console.log('Factura descargada con éxito');
+    } catch (error) {
+      console.log('Error al descargar la factura:', error);
+    }
     console.log('Número de factura:', numeroFactura);
   }
+  
   obtenerFacturasPorClienteId(clienteId: number): void {
     this.facturaService.getFacturasByClienteId(clienteId).subscribe(
       facturas => {

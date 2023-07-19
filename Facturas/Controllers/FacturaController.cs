@@ -13,6 +13,9 @@ namespace Facturas.Controllers
         private readonly IClienteService _clienteService;
         private readonly ILineaFacturaService _lineaFacturaService;
         private readonly ICrearFactura _crearFactura;
+        private const string DocumentPath = "DOCS/Actuales";
+        private const string DocumentPathPasados = "./DOCS/PASADOS/";// Ruta relativa a la carpeta de documentos
+
         public FacturaController(IFacturaService facturaService, IClienteService clienteService, ILineaFacturaService lineaFacturaService, ICrearFactura crearFactura)
         {
             _facturaService = facturaService;
@@ -92,52 +95,45 @@ namespace Facturas.Controllers
             return Ok(factura);
         }
 
-        [HttpGet("Descargar")]
-        public IActionResult DescargarFactura(string numeroFactura)
+        [HttpPut("{numfactura}")]
+        public async Task<IActionResult> UpdateFactura(int numfactura, int id)
         {
-            // Aquí debes agregar la lógica para obtener la ruta del archivo generado en tu servidor
-            string rutaArchivo = ObtenerRutaArchivo(numeroFactura);
+            Factura factura = await _facturaService.GetFacturaById(numfactura);
 
-            if (!string.IsNullOrEmpty(rutaArchivo) && System.IO.File.Exists(rutaArchivo))
-            {
-                // Lee el archivo como un arreglo de bytes
-                byte[] archivoBytes = System.IO.File.ReadAllBytes(rutaArchivo);
-
-                // Establece el tipo MIME del archivo
-                string tipoMime = "application/pdf"; // Aquí debes ajustarlo al tipo de archivo correcto
-
-                // Devuelve el archivo como resultado para descarga
-                return File(archivoBytes, tipoMime, "factura.pdf"); // Aquí puedes especificar el nombre del archivo deseado para la descarga
-            }
-            else
-            {
-                // Manejo del caso en el que el archivo no existe
-                // Por ejemplo, puedes redirigir a una página de error
-                return NotFound();
-            }
-        }
-
-        private string ObtenerRutaArchivo(string numeroFactura)
-        {
-            // Aquí debes implementar la lógica para obtener la ruta del archivo generado en tu servidor
-            // Puedes utilizar el número de factura para construir la ruta del archivo o buscarlo en una ubicación específica
-            // Retorna la ruta completa del archivo generado
-            string rutaArchivo = "ruta/del/archivo.pdf";
-            return rutaArchivo;
-        }
-
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFactura(int id, Factura factura)
-        {
-            if (id != factura.NumeroFactura)
+            if (factura == null)
             {
                 return BadRequest();
             }
 
-            await _facturaService.UpdateFactura(factura);
+            string nombreArchivo = $"Num{numfactura}.pdf";
+            string rutaCarpeta = Path.Combine(DocumentPath);
+
+            // Buscar todos los archivos PDF que coincidan con el patrón
+            string[] archivos = Directory.GetFiles(rutaCarpeta, $"*{nombreArchivo}");
+
+            // Verificar si el archivo existe
+            if (!archivos.Any())
+            {
+                return NotFound("Factura no encontrada");
+            }
+
+            string archivoExistente = archivos.First();
+
+            // Crear la ruta de destino
+            string rutaCarpetaPasados = Path.Combine(DocumentPathPasados);
+            string nombreArchivoPasado = $"{DateTime.Now.ToString("yyyyMMdd_HHmmss")}_{Path.GetFileName(archivoExistente)}";
+            string rutaArchivoPasado = Path.Combine(rutaCarpetaPasados, nombreArchivoPasado);
+
+            // Mover el archivo a la carpeta de pasados con el nuevo nombre
+            System.IO.File.Move(archivoExistente, rutaArchivoPasado);
+
+           await CrearFactura(id, numfactura);
+
             return NoContent();
         }
+
+
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFactura(int id)
@@ -177,6 +173,32 @@ namespace Facturas.Controllers
             return numeroFactura;
         }
 
+        [HttpGet("archivo")]
+        public async Task<IActionResult> GetFacturaArchivo(int identificador)
+        {
+            Factura factura = await _facturaService.GetFacturaById(identificador);
+
+            if (factura == null)
+            {
+                return BadRequest("Identificador inválido");
+            }
+
+            string nombreArchivo = $"Num{identificador}.pdf";
+            string rutaCarpeta = Path.Combine(DocumentPath);
+
+            // Buscar todos los archivos PDF que coincidan con el patrón
+            string[] archivos = Directory.GetFiles(rutaCarpeta, $"*{nombreArchivo}");
+
+            if (archivos.Length > 0)
+            {
+                // Tomar el primer archivo encontrado
+                string rutaArchivo = archivos.First();
+                byte[] archivoBytes = System.IO.File.ReadAllBytes(rutaArchivo);
+                return File(archivoBytes, "application/pdf", "factura");
+            }
+
+            return NotFound("Factura no encontrada");
+        }
 
     }
 }

@@ -66,5 +66,19 @@ namespace Facturas.Controllers
             _lineaFacturaService.DeleteLineaFactura(id);
             return Ok();
         }
+
+
+        [HttpGet("editar/{facturaId}")]
+        public IActionResult GetLineasFactura(int facturaId)
+        {
+            List<LineaFactura> lineasFactura = _lineaFacturaService.GetLineasFacturaByFacturaId(facturaId);
+
+            if (lineasFactura == null)
+            {
+                return NotFound("Líneas de factura no encontradas");
+            }
+
+            return Ok(lineasFactura);
+        }
     }
 }

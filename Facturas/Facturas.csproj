@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DOCS\" />
+    <Folder Include="DOCS\PASADOS\" />
     <Folder Include="Migrations\" />
     <Folder Include="Fonts\" />
   </ItemGroup>

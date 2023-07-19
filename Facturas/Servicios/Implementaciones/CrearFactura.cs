@@ -103,7 +103,7 @@ namespace Facturas.Servicios.Implementaciones
         {
             string fechaActual = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string nombreArchivo = $"{fechaActual}_ID{factura.ClienteID}_Num{factura.NumeroFactura}.pdf";
-            string carpetaDocs = "DOCS"; // Carpeta donde se guardarán los archivos PDF
+            string carpetaDocs = "DOCS/Actuales"; // Carpeta donde se guardarán los archivos PDF
             string rutaArchivo = Path.Combine(Directory.GetCurrentDirectory(), carpetaDocs, nombreArchivo);
             return rutaArchivo;
         }
