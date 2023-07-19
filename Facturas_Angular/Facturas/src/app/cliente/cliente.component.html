@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 mx-auto">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Datos del Cliente</h2>
+            <div class="form-group">
+              <label for="nombre">Nombre:</label>
+              <p>{{ cliente.nombre }}</p>
+            </div>
+            <div class="form-group">
+              <label for="nif">NIF:</label>
+              <p>{{ cliente.nif }}</p>
+            </div>
+            <div class="form-group">
+              <label for="domicilio">Domicilio:</label>
+              <p>{{ cliente.domicilio }}</p>
+            </div>
+            <div class="form-group">
+              <label for="poblacion">Población:</label>
+              <p>{{ cliente.poblacion }}</p>
+            </div>
+            <div class="form-group">
+              <label for="codigoPostal">Código Postal:</label>
+              <p>{{ cliente.codigoPostal }}</p>
+            </div>
+            <div class="form-group">
+              <label for="provincia">Provincia:</label>
+              <p>{{ cliente.provincia }}</p>
+            </div>
+            <div class="form-group">
+              <label for="pais">País:</label>
+              <p>{{ cliente.pais }}</p>
+            </div>
+            <div class="form-group">
+              <label for="fechaAlta">Fecha de Alta:</label>
+              <p>{{ cliente.fechaAlta }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6 mx-auto">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">Mostrar todas las facturas</h2>
+              <button class="btn btn-primary">Mostrar Facturas</button>
+              <div *ngFor="let factura of facturas" class="mt-3">
+                <div class="d-flex justify-content-between">
+                  <p>{{ factura.numeroFactura }}</p>
+                  <div>
+                    <button class="btn btn-primary" (click)="descarga(factura.numeroFactura!)">Imprimir</button>
+                    <button class="btn btn-primary">Editar</button>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary mt-3" routerLink="/crear">Crear Factura</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      

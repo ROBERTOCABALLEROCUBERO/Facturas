@@ -1,0 +1,25 @@
+<div class="row mt-4">
+  <div class="col-md-6 mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Crear Factura</h2>
+        <form>
+          <div class="form-group">
+            <label for="concepto">Concepto</label>
+            <input type="text" class="form-control" id="concepto" [(ngModel)]="nuevaLineaFactura.concepto" name="concepto" required>
+          </div>
+          <div class="form-group">
+            <label for="precio">Precio</label>
+            <input type="number" class="form-control" id="precio" [(ngModel)]="nuevaLineaFactura.precio" name="precio" required>
+          </div>
+          <div class="form-group">
+            <label for="unidades">Unidades</label>
+            <input type="number" class="form-control" id="unidades" [(ngModel)]="nuevaLineaFactura.unidades" name="unidades" required>
+          </div>          
+          <button class="btn btn-primary" (click)="agregarLineaFactura()">Añadir línea</button>
+          <button class="btn btn-primary" (click)="crearFactura()" type="button">Crear Factura</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+
+  /* Estilos personalizados para los botones */
+  .btn-primary {
+    background-color: #007bff; /* Color primario personalizado */
+    border-color: #08ad4a;
+  }
+  
+  .btn-primary:hover {
+    background-color: #08ad4a; /* Color de hover personalizado */
+    border-color: #0069d9;
+  }
+  
+  /* Espaciado entre los botones */
+  .btn-group {
+    margin-top: 10px;
+  }
+  
+  .btn-group .btn {
+    margin-right: 10px;
+  }

@@ -1,0 +1,58 @@
+<div class="container text-center mt-5">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Crear Cliente</h2>
+        <button class="btn btn-primary mb-2" (click)="mostrarFormulario = !mostrarFormulario">
+          {{ mostrarFormulario ? 'Ocultar formulario de registro' : 'Mostrar formulario de registro' }}
+        </button>
+        
+        <form *ngIf="mostrarFormulario" (ngSubmit)="crearCliente()" class="mt-3">
+          <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" [(ngModel)]="cliente.nombre" name="nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="nif">NIF:</label>
+            <input type="text" class="form-control" id="nif" [(ngModel)]="cliente.nif" name="nif">
+          </div>
+          <div class="form-group">
+            <label for="domicilio">Domicilio:</label>
+            <input type="text" class="form-control" id="domicilio" [(ngModel)]="cliente.domicilio" name="domicilio">
+          </div>
+          <div class="form-group">
+            <label for="poblacion">Población:</label>
+            <input type="text" class="form-control" id="poblacion" [(ngModel)]="cliente.poblacion" name="poblacion">
+          </div>
+          <div class="form-group">
+            <label for="codigoPostal">Código Postal:</label>
+            <input type="text" class="form-control" id="codigoPostal" [(ngModel)]="cliente.codigoPostal" name="codigoPostal">
+          </div>
+          <div class="form-group">
+            <label for="provincia">Provincia:</label>
+            <input type="text" class="form-control" id="provincia" [(ngModel)]="cliente.provincia" name="provincia">
+          </div>
+          <div class="form-group">
+            <label for="pais">País:</label>
+            <input type="text" class="form-control" id="pais" [(ngModel)]="cliente.pais" name="pais">
+          </div>
+  
+          <button type="submit" class="btn btn-primary">Crear Cliente</button>
+        </form>
+      </div>
+    </div>
+  
+    <hr>
+  
+    <div class="card mt-4">
+      <div class="card-body">
+        <h2 class="card-title">Obtener Cliente por ID</h2>
+        <div class="form-group">
+          <label for="clienteId">ID del Cliente:</label>
+          <input type="number" class="form-control" id="clienteId" [(ngModel)]="cliente.id" name="clienteId" required>
+        </div>
+        <button class="btn btn-primary" (click)="obtenerClientePorId(cliente.id!)">Obtener Cliente</button>
+      </div>
+    </div>
+  </div>
+  
+  
